@@ -40,8 +40,6 @@ def data_lookup_node(state: AgentState):
         result = executor.invoke({"messages": state.history})
         final_answer = result.get("output", "")
         data = json.loads(final_answer)
-        print("--data--")
-        print(data)
         content = data.get("answer")
         if isinstance(content, dict):
             answer = json.dumps(content)
@@ -60,22 +58,18 @@ def data_lookup_node(state: AgentState):
 
 
 def escalate_node(state: AgentState):
-    print("--escalation--")
     ESCALATION_PROMPT_TEMPLATE = ChatPromptTemplate.from_template(ESCALATION_PROMPT)
 
     escalate_chain = (
         ESCALATION_PROMPT_TEMPLATE | llm | StrOutputParser()
     )
-    print("--chain preparation--")
     error_text = "\n".join(state.errors)
     context = "\n".join(state.history)
     response = escalate_chain.invoke({"answer": state.answer, "context": context, "error_text": error_text})
-    print(response)
     state.answer = response
     return state
 
 def synthesize_node(state: AgentState):
-    print("--In Synthesize--")
     history = state.history
     history.append(f"AIMessage(content='{state.answer})")
     state.history = history

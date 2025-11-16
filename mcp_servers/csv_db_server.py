@@ -36,7 +36,7 @@ BASE_DIR = Path(__file__).resolve().parent
 def account_lookup_impl(account_id: Optional[str] = None, company: Optional[str] = None) -> Dict[str, Any]:
     """Retrieve account plan, tier, CSM, and renewal details by account_id or company."""
     # Load data
-    df = pd.read_csv("NovaCRM_Capstone_Dataset/accounts.csv")
+    df = pd.read_csv("../data/tools/accounts.csv")
 
     # Validate input
     if not account_id and not company:
@@ -76,7 +76,7 @@ def invoice_status_impl(account_id:str, period_start:str, period_end:str, invoic
     Look up invoice details and status by account_id, period, or invoice_id.
     """
     # Load data
-    df = pd.read_csv("NovaCRM_Capstone_Dataset/invoices.csv")
+    df = pd.read_csv("../data/tools/invoices.csv")
     # If invoice_id provided, match directly
     if invoice_id:
         result = df[df['invoice_id'] == invoice_id]
@@ -128,7 +128,7 @@ def ticket_summary_impl(account_id, top_n=5, window_days=90):
     """
 
     # Load and clean data
-    df = pd.read_csv("NovaCRM_Capstone_Dataset/tickets.csv")
+    df = pd.read_csv("../data/tools/tickets.csv")
     df['opened_on'] = pd.to_datetime(df['opened_on'], errors='coerce')
 
     # Filter by account and time window
@@ -163,7 +163,7 @@ def usage_report_impl(account_id: str, month: str):
     """
 
     # Read usage CSV
-    usage_df = pd.read_csv("NovaCRM_Capstone_Dataset/usage.csv")
+    usage_df = pd.read_csv("../data/tools/usage.csv")
 
     # Filter by account_id and month
     usage = usage_df[
@@ -236,6 +236,5 @@ if __name__ == "__main__":
     mcp.run(
         transport="streamable-http",
         host="127.0.0.1",
-        port=3000,
-        stateless_http=True,
+        port=3000
     )
