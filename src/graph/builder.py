@@ -18,10 +18,7 @@ def build_graph():
     workflow.add_node("rationale_node",rationale_node)
     workflow.set_entry_point("Router")
     workflow.add_conditional_edges("Router",routing_request)
-    # After each answer, update history and loop back
-    # workflow.add_edge("FAQ", "Synthesize")
     workflow.add_edge("rationale_node", "DataLookup")
-    # workflow.add_edge("DataLookup", "Synthesize")
     workflow.add_edge("Escalate", END)
     workflow.add_edge("Synthesize", END)
 
